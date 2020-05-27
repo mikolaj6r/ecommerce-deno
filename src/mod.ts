@@ -30,7 +30,7 @@ const viewConfig: ViewConfig = {
 // simple static files server
 app.use(async (ctx, next) => {
   await send(ctx, ctx.request.url.pathname, {
-    root: `${Deno.cwd()}/static`,
+    root: `${Deno.cwd()}/public`,
   });
   next();
 });
