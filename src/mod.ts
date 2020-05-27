@@ -1,6 +1,9 @@
 import * as flags from "https://deno.land/std/flags/mod.ts";
 
-import { Application, Router, send, Context } from "https://deno.land/x/oak/mod.ts";
+// auto load env vars
+import "https://deno.land/x/dotenv/load.ts";
+
+import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 import {
   viewEngine,
   engineFactory,
