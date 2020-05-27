@@ -5,7 +5,7 @@ default:
 	make dev
 
 dev:
-	$(GO_TO_SOURCE); denon run --allow-net $(ENTRY_POINT)
+	$(GO_TO_SOURCE); denon run --allow-net --allow-read $(ENTRY_POINT)
 
 format:
 	$(GO_TO_SOURCE); deno fmt
