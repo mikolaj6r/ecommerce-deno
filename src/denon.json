@@ -1,0 +1,9 @@
+{
+    "watcher": {
+        "interval": 350,
+        "exts": ["js", "ts", "json", "njk"],
+        "match": ["*.*"],
+        "skip": ["*/.git/*"],
+        "legacy": false
+      }
+}
