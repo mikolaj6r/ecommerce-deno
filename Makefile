@@ -5,7 +5,7 @@ default:
 	make dev
 
 dev:
-	$(GO_TO_SOURCE); denon run --allow-net --allow-read  --allow-write --allow-plugin --allow-env --importmap=import_map.json --unstable $(ENTRY_POINT)
+	$(GO_TO_SOURCE); denon run --allow-net --allow-read  --allow-write --allow-plugin --allow-env --unstable $(ENTRY_POINT)
 
 inspect:
 	$(GO_TO_SOURCE); denon run --inspect --allow-net --allow-read --allow-write --allow-plugin --allow-env --unstable $(ENTRY_POINT)
@@ -17,7 +17,7 @@ install:
 	$(GO_TO_SOURCE); deno install --unstable --allow-read --allow-write --allow-run -f https://deno.land/x/denon/denon.ts;
 
 run:
-	$(GO_TO_SOURCE); deno run --allow-net --allow-read --allow-env --importmap=import_map.json --unstable $(ENTRY_POINT)
+	$(GO_TO_SOURCE); deno run --allow-net --allow-read --allow-env --unstable $(ENTRY_POINT)
 
 test:
 	$(GO_TO_SOURCE); deno test
