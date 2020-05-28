@@ -4,6 +4,7 @@
   <title> E-commerce </title> 
  </head>
  <body>
-  <h1> Hello {{ data.msg }}</h1> 
+    {% include "views/_nav.njk" %}
+    {% block content %}{% endblock content %}
  </body>
 </html>
