@@ -3,13 +3,19 @@ import * as flags from "https://deno.land/std/flags/mod.ts";
 // auto load env vars
 import "https://deno.land/x/dotenv/load.ts";
 
-import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
+import { Application , Router, send, Middleware, RouterMiddleware } from "./deps.ts";
 import {
   viewEngine,
   engineFactory,
   adapterFactory,
   ViewConfig
 } from "https://deno.land/x/view_engine/mod.ts";
+
+
+import mainRouter from './routes/main.ts'
+import adminRouter from './routes/admin.ts'
+import notFound from './middleware/not_found.ts'
+import database from './middleware/db.ts'
 
 const DEFAULT_PORT = 8080;
 const argPort = flags.parse(Deno.args).port;
@@ -21,34 +27,44 @@ if (isNaN(port)) {
 }
 
 const app = new Application();
-const router = new Router();
 
 const denjuckEngine = await engineFactory.getDenjuckEngine();
 const oakAdapter = await adapterFactory.getOakAdapter();
 
 const viewConfig: ViewConfig = {
   viewRoot: "./views",
+  viewExt: ".njk"
 }
 
-// simple static files server
-app.use(async (ctx, next) => {
-  await send(ctx, ctx.request.url.pathname, {
-    root: `${Deno.cwd()}/public`,
-  });
-  next();
-});
 
 // view middleware
 app.use(viewEngine(oakAdapter, denjuckEngine, viewConfig));
 
-
-router.get("/", (ctx) => {
-  ctx.render("index.html", { data: { msg: "World" } });
-});
+// provide database to context
+app.use(database);
 
 //Adding middleware to require our router
-app.use(router.routes());
-app.use(router.allowedMethods());
+const parentRouter = new Router();
 
-console.log("App is listening to port: 8000");
-await app.listen({ port: 8000 });
+parentRouter.all("mainRouter", "(.*)", mainRouter.routes());
+parentRouter.all("adminRouter", "/admin(/.*)?", adminRouter.routes());
+
+app.use(parentRouter.routes());
+
+app.use(notFound);
+
+app.addEventListener("listen", () => {
+  console.log("App is listening to port: 8000");
+
+});
+
+app.addEventListener("error", (error) => {
+  console.error("Error", error);
+});
+
+try {
+  await app.listen({ port: 8000 });
+}
+catch {
+  console.error("App cannot bind");
+}
