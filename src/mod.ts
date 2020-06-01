@@ -10,10 +10,12 @@ import {
   adapterFactory,
   ViewConfig
 } from "https://deno.land/x/view_engine/mod.ts";
+import { Session } from "https://deno.land/x/session/mod.ts";
 
 
 import mainRouter from './routes/main.ts'
 import adminRouter from './routes/admin.ts'
+
 import notFound from './middleware/not_found.ts'
 import database from './middleware/db.ts'
 
@@ -28,6 +30,11 @@ if (isNaN(port)) {
 
 const app = new Application();
 
+// Configuring Session for the Oak framework
+const session = new Session({ framework: "oak" });
+await session.init();
+
+
 const denjuckEngine = await engineFactory.getDenjuckEngine();
 const oakAdapter = await adapterFactory.getOakAdapter();
 
@@ -36,6 +43,9 @@ const viewConfig: ViewConfig = {
   viewExt: ".njk"
 }
 
+
+// session middleware
+app.use(session.use()(session));
 
 // view middleware
 app.use(viewEngine(oakAdapter, denjuckEngine, viewConfig));

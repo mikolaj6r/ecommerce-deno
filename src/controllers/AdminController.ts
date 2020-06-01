@@ -1,15 +1,15 @@
 export default {
     async index(ctx: any){
-        const products = ctx.db.collection("products");
-        
 
-        ctx.render("accounts/admin");
+        const user = await ctx.session.get("user");
+        ctx.render("accounts/admin", { user });
 
     },
     async getLogin(ctx: any){
         if (ctx.request.user) return ctx.response.redirect('/');
         ctx.render('accounts/login', { messages: ["Login first, please"]});
     },
+    
     async postLogin(ctx: any){
         const data = await ctx.request.body();
 
@@ -35,6 +35,11 @@ export default {
         if(errors.length === 0 && checkedEmail === true && checkedPass === true){
             // user validated
             console.log('validated')
+
+            const email = data.value.get('email');
+
+            await ctx.session.set("user", email );
+
             ctx.response.redirect('/admin');
 
         }
