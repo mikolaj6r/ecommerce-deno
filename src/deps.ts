@@ -1,1 +1,1 @@
-export { Application , Router, send, Middleware, RouterMiddleware } from "https://raw.githubusercontent.com/mikolaj6r/oak/fix/router-chain/mod.ts";
+export { Application , Router, send, Middleware, RouterMiddleware } from "https://deno.land/x/oak/mod.ts";
