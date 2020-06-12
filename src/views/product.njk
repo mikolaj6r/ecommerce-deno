@@ -1,0 +1,17 @@
+{% extends "views/_base.njk" %}
+
+{% block content %}
+<section class="products">
+    <article>
+        <header>
+            <h2>{{ product.name }}</h2>
+        </header>
+        <img src="{{ product.image }}" />
+        <aside>
+            Price: {{ product.price }}
+            <a href="" />Add to cart</a>
+        </aside>
+    </article>
+</section>
+{% endblock content %}
+

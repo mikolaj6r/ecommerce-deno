@@ -4,7 +4,15 @@
   <title> E-commerce </title> 
  </head>
  <body>
-    {% include "views/_nav.njk" %}
-    {% block content %}{% endblock content %}
+
+   <header>
+      {% include "views/_nav.njk" %}
+   </header>
+   <main>
+      {% block content %}{% endblock content %}
+   </main>
+   <footer>
+   See U later!
+   </footer>
  </body>
 </html>

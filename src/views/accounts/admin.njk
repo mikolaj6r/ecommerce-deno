@@ -1,4 +1,22 @@
-Admin panel!
+{% extends "views/_base.njk" %}
 
-{{ user }}
+{% block content %}
+    Admin panel!
+    Hello {{ user }}
 
+<table>
+  <tbody>
+    {% for product in products %}
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td><img src="{{ product.image }}" style="width: 200px; height: 200px"/></td>
+        <td><a href="/admin/edit-product/{{ product._id["$oid"] }}" >Edit</a></td>
+
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+    
+{% endblock content %}

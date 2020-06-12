@@ -1,0 +1,24 @@
+{% extends "views/_base.njk" %}
+
+{% block content %}
+    Admin panel!
+    Hello {{ user }}
+    Edit product
+
+<form action="/admin/edit-product/{{ product._id["$oid"] }}" method="post">
+    <label>
+        Name
+        <input type="text" name="name" placeholder="Name" value="{{ product.name }}"/>
+    </label>
+    <label>
+        Price (PLN)
+        <input type="number" name="price" value="{{ product.price }}"/>
+    </label>
+    <label>
+        Image (link)
+        <input type="text" name="image" value="{{ product.image }}"/>
+    </label>
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends "views/_base.njk" %}
+
+{% block content %}
+    Admin panel!
+    Hello {{ user }}
+    New product
+
+<form action="/admin/add-product" method="post">
+    <label>
+        Name
+        <input type="text" name="name" placeholder="Name"/>
+    </label>
+    <label>
+        Price (PLN)
+        <input type="number" name="price"/>
+    </label>
+    <label>
+        Image (link)
+        <input type="text" name="image"/>
+    </label>
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock content %}
