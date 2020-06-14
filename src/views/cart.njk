@@ -1,0 +1,20 @@
+{% extends "views/_base.njk" %}
+
+{% block content %}
+    <h1>Products</h1>
+
+    <section class="products">
+    {% for product in products %}
+        <article>
+            <header>
+                <h2>{{ product.name }}</h2>
+            </header>
+            <img src="{{ product.image }}" />
+            <aside>
+                Price: {{ product.price }}
+                <a href="/product/{{ product._id["$oid"] }}" >View details</a>
+            </aside>
+        </article>
+    {% endfor %}
+    </section>
+{% endblock content %}

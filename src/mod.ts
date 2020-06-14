@@ -19,6 +19,7 @@ import productRouter from './routes/product.ts'
 
 import notFound from './middleware/not_found.ts'
 import database from './middleware/db.ts'
+import staticFile from './middleware/static.ts'
 
 const DEFAULT_PORT = 8080;
 const argPort = flags.parse(Deno.args).port;
@@ -53,6 +54,8 @@ app.use(viewEngine(oakAdapter, denjuckEngine, viewConfig));
 
 // provide database to context
 app.use(database);
+
+app.use(staticFile);
 
 //Adding middleware to require our router
 const parentRouter = new Router();

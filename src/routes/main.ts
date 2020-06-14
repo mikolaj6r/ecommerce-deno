@@ -6,5 +6,6 @@ import MainController from '../controllers/MainController.ts'
 const router = new Router();
 
 router.get( "main", "/", MainController.index)
+      .get("/cart", MainController.getCart)
 
 export default router;

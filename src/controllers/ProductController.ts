@@ -10,6 +10,8 @@ export default {
     }
 
     const product = await productService.findOne(id);
-    ctx.render("product", { product });
+    const cart = await ctx.session.get('cart');
+
+    ctx.render("product", { product, cart });
   },
 };
