@@ -1,10 +1,13 @@
 {% extends "views/_base.njk" %}
 
 {% block content %}
-    <h1>Products</h1>
+    <h1>Cart</h1>
+
+    {%  set total = cart.total or 0 %}
+    Total: {{ total }}
 
     <section class="products">
-    {% for product in products %}
+    {% for id, product in cart.items %}
         <article>
             <header>
                 <h2>{{ product.name }}</h2>
@@ -13,6 +16,7 @@
             <aside>
                 Price: {{ product.price }}
                 <a href="/product/{{ product._id["$oid"] }}" >View details</a>
+                Quantity: {{ product.quantity }}
             </aside>
         </article>
     {% endfor %}

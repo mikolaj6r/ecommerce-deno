@@ -16,6 +16,7 @@ import { Session } from "https://deno.land/x/session/mod.ts";
 import mainRouter from './routes/main.ts'
 import adminRouter from './routes/admin.ts'
 import productRouter from './routes/product.ts'
+import apiRouter from './routes/api.ts'
 
 import notFound from './middleware/not_found.ts'
 import database from './middleware/db.ts'
@@ -62,8 +63,8 @@ const parentRouter = new Router();
 
 parentRouter.all("mainRouter", "(.*)", mainRouter.routes());
 parentRouter.all("adminRouter", "/admin(/.*)?", adminRouter.routes());
-parentRouter.all("adminRouter", "/product(/.*)?", productRouter.routes());
-
+parentRouter.all("productRouter", "/product(/.*)?", productRouter.routes());
+parentRouter.all("apiRouter", "/api(/.*)?", apiRouter.routes());
 
 app.use(parentRouter.routes());
 

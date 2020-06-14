@@ -2,14 +2,14 @@
 
 {% block content %}
 <section class="products">
-    <article>
+    <article id="product" data-id="{{ product._id["$oid"] }}">
         <header>
             <h2>{{ product.name }}</h2>
         </header>
         <img src="{{ product.image }}" />
         <aside>
             Price: {{ product.price }}
-            <a href="" />Add to cart</a>
+            <button id="addToCart">Add to cart</button>
         </aside>
     </article>
 </section>
