@@ -22,6 +22,8 @@ import notFound from './middleware/not_found.ts'
 import database from './middleware/db.ts'
 import staticFile from './middleware/static.ts'
 
+import payu from './middleware/payu.ts'
+
 const DEFAULT_PORT = 8080;
 const argPort = flags.parse(Deno.args).port;
 const port = argPort ? Number(argPort) : DEFAULT_PORT;
@@ -49,6 +51,8 @@ const viewConfig: ViewConfig = {
 
 // session middleware
 app.use(session.use()(session));
+
+app.use(payu);
 
 // view middleware
 app.use(viewEngine(oakAdapter, denjuckEngine, viewConfig));

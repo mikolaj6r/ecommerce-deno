@@ -1,4 +1,6 @@
 import productService from '../services/product.ts'
+import checkoutService from '../services/checkout.ts'
+
 
 import { Router } from "../deps.ts";
 
@@ -47,4 +49,38 @@ router.post( "/cart", async ( ctx: any, next: any) => {
     ctx.response.body = 'OK'
 })
 
+router.post( "/payment-notify", async ( ctx: any, next: any) => {
+    const { value } = await ctx.request.body();
+
+    const checkout = await checkoutService.findOne(value.order.extOrderId);
+
+    if(checkout && value.order.status == "COMPLETED"){
+        const newCheckout = {
+            status: "COMPLETED"
+        };
+
+        const success = await checkoutService.edit(newCheckout, checkout._id["$oid"]);
+        if(success){
+            ctx.response.status = 200;
+            ctx.response.body = 'OK'
+            return;
+        }
+        
+    }
+    else if(checkout && value.order.status == "CANCELED"){
+        const newCheckout = {
+            status: "CANCELED"
+        };
+
+        const success = await checkoutService.edit(newCheckout, checkout._id["$oid"]);
+        if(success){
+            ctx.response.status = 200;
+            ctx.response.body = 'OK'
+        }
+        
+    }
+    
+    ctx.response.status = 200;
+    ctx.response.body = 'OK'
+})
 export default router;
