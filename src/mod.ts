@@ -9,7 +9,7 @@ import {
   engineFactory,
   adapterFactory,
   ViewConfig
-} from "https://deno.land/x/view_engine/mod.ts";
+} from "./deps.ts";
 import { Session } from "https://deno.land/x/session/mod.ts";
 
 

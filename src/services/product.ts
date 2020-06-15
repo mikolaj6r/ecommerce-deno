@@ -1,6 +1,6 @@
 import { db } from '../middleware/db.ts'
 
-import { ObjectId } from "https://deno.land/x/mongo/mod.ts";
+import { ObjectId } from "../deps.ts";
 
 export default {
     async find() {

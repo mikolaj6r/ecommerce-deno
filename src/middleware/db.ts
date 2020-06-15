@@ -1,4 +1,4 @@
-import { MongoClient } from "https://deno.land/x/mongo/mod.ts";
+import { MongoClient } from "../deps.ts";
 
 const client = new MongoClient();
 
