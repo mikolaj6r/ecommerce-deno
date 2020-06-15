@@ -80,7 +80,7 @@ app.addEventListener("error", (error) => {
 });
 
 try {
-  await app.listen({ port: 8000 });
+  await app.listen({ port });
 }
 catch {
   console.error("App cannot bind");

@@ -1,0 +1,34 @@
+{% extends "views/_base.njk" %}
+
+{% block content %}
+    <h1>Checkout</h1>
+
+    {% set total = cart.total or 0 %}
+    Total: {{ total }}
+
+    <form method="post" action="/checkout">
+        <label for="">Firstname<input name="firstname" type="text"></label>
+        <label for="">Lastname<input name="lastname" type="text"></label>
+        <label for="">Address<input name="address" type="text"></label>
+        <label for="">Postal code<input name="postal" type="text"></label>
+        <label for="">Email<input name="email" type="email"></label>
+        <label for="">Phone<input name="phone" type="number"></label>
+
+        <p>Select pay method:</p>
+
+        <div>
+            <label>Online
+                <input type="radio" name="method" value="online"
+                checked>
+            </label>
+        </div>
+
+        <div>
+            <label>Traditional
+                <input type="radio" name="method" value="traditional">
+            </label>
+        </div>
+        <button type="submit">Continue</button>
+    </form>
+
+{% endblock content %}

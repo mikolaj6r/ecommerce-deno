@@ -1,0 +1,29 @@
+{% extends "views/_base.njk" %}
+
+{% block content %}
+<section>
+    <ul>
+        <li>{{ checkout.type }}</li>
+        <li>{{ checkout.price }}</li>
+        <li>{{ checkout.status }}</li>
+        <li>{{ checkout.firstname }}</li>
+        <li>{{ checkout.lastname }}</li>
+        <li>{{ checkout.address }}</li>
+        <li>{{ checkout.postal }}</li>
+        <li>{{ checkout.email }}</li>
+        <li>{{ checkout.phone }}</li>
+    </ul>
+
+    <div>
+        Selected pay method: {{ checkout.type }}
+
+        {% if checkout.type == "traditional" %}
+            Please make a money transfer on this account : 00 1120 1030 1234 1234 1234.
+            In the transfer name please write: "Order: {{ checkout._id["$oid"] }}"
+        {% elif checkout.type == "online" %}
+            <a href="" >To pay online please click here</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock content %}
+
