@@ -6,7 +6,7 @@
  <body>
 
    <header>
-      {% include "views/_nav.njk" %}
+      {% include "_nav.njk" %}
       <div>
          {%  set total = cart.total or 0 %}
          <a href="/cart" >Cart: <span id="cartCount">{{ total | int }}</span></a>
