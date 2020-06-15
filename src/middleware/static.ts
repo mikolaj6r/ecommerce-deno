@@ -1,5 +1,5 @@
 import { send } from "../deps.ts";
-import { resolvePath } from 'https://deno.land/x/oak/util.ts'
+import { resolvePath } from 'https://deno.land/x/oak@v5.2.0/util.ts'
 
 export default async (context: any, next: any) => {
         if(context.request.url.pathname.includes("/public")){
