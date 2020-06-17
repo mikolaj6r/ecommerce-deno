@@ -1,24 +1,61 @@
 {% extends "_base.njk" %}
 
-{% block content %}
-    Admin panel!
-    Hello {{ user }}
-    Edit product
+{% block header %}
+    Hello {{ user }} | Edit product
+{% endblock header %}
 
+{% block content %}
 <form action="/admin/edit-product/{{ product._id["$oid"] }}" method="post">
-    <label>
-        Name
-        <input type="text" name="name" placeholder="Name" value="{{ product.name }}"/>
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">
+      Product information
+    </h3>
+    <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+      Edit product details
+    </p>
+  </div>
+  <div>
+    <dl>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Name
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+            <label>
+        <input  class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" type="text" name="name" value="{{ product.name }}"/>
     </label>
-    <label>
-        Price (PLN)
-        <input type="number" name="price" value="{{ product.price }}"/>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Image
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+              <label>
+        <input  class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" type="text" name="image" value="{{ product.image }}"/>
+        </label>
+        </dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Price (PLN)
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+              <label>
+        <input class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" type="number" name="price" value="{{ product.price }}"/>
     </label>
-    <label>
-        Image (link)
-        <input type="text" name="image" value="{{ product.image }}"/>
-    </label>
-    <button type="submit">Submit</button>
+        </dd>
+      </div>
+    </dl>
+  </div>
+   <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+        <button type="submit" class="flex justify-center px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none">
+        <span class="ml-2 mt-5px">Save</span>
+        </button>
+  </div>
+</div>
+
 </form>
 
 {% endblock content %}

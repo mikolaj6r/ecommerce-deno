@@ -14,6 +14,7 @@ router.get("/", AuthController.isSignedIn, AdminController.index)
       .post("/add-product", AuthController.isSignedIn, AdminController.postNewProduct)
       .get("/edit-product/:id", AuthController.isSignedIn, AdminController.getEditProduct)
       .post("/edit-product/:id", AuthController.isSignedIn, AdminController.postEditProduct)
+      .get("/delete-product/:id", AuthController.isSignedIn, AdminController.getDeleteProduct)
 
 
 export default router;

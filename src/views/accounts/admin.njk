@@ -1,22 +1,71 @@
 {% extends "_base.njk" %}
 
-{% block content %}
-    Admin panel!
+{% block header %}
     Hello {{ user }}
+        <span class="ml-12 shadow-sm rounded-md">
+      <a href="/admin/add-product" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out">
+        <svg class="-ml-1 mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        Add new product
+      </a>
+    </span>
+{% endblock header %}
 
-<table>
-  <tbody>
+{% block content %}
+<div class="flex flex-col">
+  <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+      <table class="min-w-full">
+        <thead>
+          <tr>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Image
+            </th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Price
+            </th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
     {% for product in products %}
-      <tr>
-        <td>{{ product.name }}</td>
-        <td>{{ product.price }}</td>
-        <td><img src="{{ product.image }}" style="width: 200px; height: 200px"/></td>
-        <td><a href="/admin/edit-product/{{ product._id["$oid"] }}" >Edit</a></td>
 
-      </tr>
+          <tr>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <img class="h-10 w-10 rounded-full" src="{{ product.image }}" alt="product image" />
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <div class="text-sm leading-5 text-gray-900">{{ product.name }}
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+               {{ product.price }} PLN
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+              <a href="/admin/edit-product/{{ product._id["$oid"] }}" class="text-indigo-600 hover:text-indigo-900">Edit
+              </a>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+              <a href="/admin/delete-product/{{ product._id["$oid"] }}" class="text-indigo-600 hover:text-indigo-900">Delete
+              </a>
+            </td>
+          </tr>
     {% endfor %}
-  </tbody>
-</table>
 
-    
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {% endblock content %}

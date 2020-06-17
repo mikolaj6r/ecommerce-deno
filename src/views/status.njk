@@ -1,27 +1,48 @@
 {% extends "_base.njk" %}
 
+{% block header %}
+    Order: {{ checkout._id["$oid"] }}  | Payment status: {{ checkout.status }}
+{% endblock header %}
+
 {% block content %}
-<section>
-    Order data:
-    <ul>
-        <li>Price: {{ checkout.price }}</li>
-        <li>Payment status: {{ checkout.status }}</li>
-        <li>Firstname: {{ checkout.firstname }}</li>
-        <li>Lastname: {{ checkout.lastname }}</li>
-        <li>Address: {{ checkout.address }}</li>
-        <li>Postal code: {{ checkout.postal }}</li>
-        <li>E-mail: {{ checkout.email }}</li>
-        <li>Phone: {{ checkout.phone }}</li>
-    </ul>
-
-    <div>
-        Selected pay method: {{ checkout.type }}
-
-        {% if checkout.type == "traditional" %}
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">
+      Order information
+    </h3>
+    <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+      Details and payment status.
+    </p>
+  </div>
+  <div>
+    <dl>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Full name
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          {{ checkout.firstname }} {{ checkout.lastname }}
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Payment method
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          {{ checkout.type }}
+        </dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Payment status
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <span clas="font-bold">{{ checkout.status }}</span><br>
+           {% if checkout.type == "traditional" %}
             Please make a money transfer on this account : 00 1120 1030 1234 1234 1234.
             In the transfer name please write: "Order: {{ checkout._id["$oid"] }}"
         {% elif checkout.type == "online" and checkout.status == "PENDING" %}
-            <a href="{{ checkout.paymentLink }}" target="_blank">To pay online please click here</a>
+            <a href="{{ checkout.paymentLink }}" target="_blank" class="text-red-500">To pay online please click here</a><br>
             This website will auto refresh until payment status changes.
             <script>
                 window.setTimeout(() => {
@@ -30,7 +51,42 @@
                 }, 6000);
             </script>
         {% endif %}
-    </div>
-</section>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Email address
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          {{ checkout.email }}
+        </dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Phone
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          {{ checkout.phone }}
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Address
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          {{ checkout.address }} | {{ checkout.postal }}
+        </dd>
+      </div>
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Total price
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          {{ checkout.price }} PLN
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
 {% endblock content %}
 

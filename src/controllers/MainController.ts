@@ -2,6 +2,11 @@ import productService from '../services/product.ts'
 import checkoutService from '../services/checkout.ts'
 import emailService from '../services/email.ts'
 
+interface CartItem {
+    quantity: number,
+    price: number
+}
+
 export default {
     async index(ctx: any){
         const products = await productService.find();
@@ -17,6 +22,58 @@ export default {
         const products = await productService.find();
 
         ctx.render("cart", { products, cart });
+
+    },
+
+    async postCart(ctx: any){
+        interface Cart {
+            items?: {
+                [key: string]: CartItem
+            },
+            totalQuantity?: number,
+            totalPrice?: number
+        }
+
+        const cart: Cart = await ctx.session.get("cart");
+
+
+        const { value: data } = await ctx.request.body();
+
+        let items = {
+            ...cart.items
+        }
+
+        for (let [ name, value ] of data) {
+            if(items[name]){
+                items[name].quantity = Number(value);
+
+                if(value == 0){
+                    delete items[name];
+                }
+            }
+        }
+
+        console.log(items);
+
+
+        const newCart: Cart = {
+            items
+        }
+
+        const totalQuantity = newCart.items && Object.values<CartItem>(newCart.items).reduce<number>((acc: number, el: CartItem) => {
+            return acc + el.quantity
+        }, 0) || 0;
+
+        const totalPrice = newCart.items && Object.values<CartItem>(newCart.items).reduce<number>((acc: number, el: CartItem) => {
+            return acc + ( el.quantity * el.price )
+        }, 0) || 0;
+
+        newCart.totalQuantity = totalQuantity;
+        newCart.totalPrice = totalPrice;
+
+        await ctx.session.set("cart", newCart);
+
+        ctx.response.redirect('/checkout');
 
     },
 
@@ -65,6 +122,8 @@ export default {
         };
 
         const { ["$oid"]: id } = await checkoutService.add(checkout);
+    
+        const { origin } = ctx.request.url;
 
         if(id){
             //send mail
@@ -73,7 +132,7 @@ export default {
                 to: [{ email }],
                 from: { email: Deno.env.get("EMAIL") || "" },
                 content: [
-                { type: "text/html", value: `<a href="${`http://4219af7f767c.ngrok.io/checkout/${id}`}" >Click here to check Your order status!</a>` },
+                { type: "text/html", value: `<a href="${origin}/checkout/${id}" >Click here to check Your order status!</a>` },
                 ],
             })
             console.log(res);
@@ -97,8 +156,8 @@ export default {
                   "Authorization": `Bearer ${token}`,
               },
               body: JSON.stringify({
-                    "notifyUrl": "http://4219af7f767c.ngrok.io/api/payment-notify",
-                    "continueUrl": `http://4219af7f767c.ngrok.io/checkout/${id}`,
+                    "notifyUrl": `${origin}/api/payment-notify`,
+                    "continueUrl": `${origin}/checkout/${id}`,
                     "customerIp": "127.0.0.1",
                     "merchantPosId": "388914",
                     "description": "E-commerce labs",

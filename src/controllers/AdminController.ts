@@ -142,4 +142,22 @@ export default {
         }
 
     },
+
+    async getDeleteProduct(ctx: any){
+        const id = ctx.params && ctx.params.id;
+
+        if(!id){
+            ctx.response.redirect("/admin");
+            return;
+        }
+
+        const success = await productService.delete(id);
+
+        if(success){
+            ctx.response.redirect("/admin");   
+        }
+        else {
+            ctx.response.redirect("/admin");
+        }
+    },
 }

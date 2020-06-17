@@ -1,34 +1,65 @@
 {% extends "_base.njk" %}
 
+{%  set totalPrice = cart.totalPrice or 0 %}
+{%  set totalQuantity = cart.totalQuantity or 0 %}
+
+{% block header %}
+    Checkout | Total: {{ totalPrice }} PLN
+{% endblock header %}
+
 {% block content %}
-    <h1>Checkout</h1>
-
-    {% set total = cart.total or 0 %}
-    Total: {{ total }}
-
-    <form method="post" action="/checkout">
-        <label for="">Firstname<input name="firstname" type="text"></label>
-        <label for="">Lastname<input name="lastname" type="text"></label>
-        <label for="">Address<input name="address" type="text"></label>
-        <label for="">Postal code<input name="postal" type="text"></label>
-        <label for="">Email<input name="email" type="email"></label>
-        <label for="">Phone<input name="phone" type="number"></label>
-
-        <p>Select pay method:</p>
-
-        <div>
-            <label>Online
-                <input type="radio" name="method" value="online"
-                checked>
-            </label>
+  <div class="flex w-full justify-between p-8 text-gray-800 bg-white shadow-lg pin-r pin-y">
+      <form method="post" action="/checkout" class="flex flex-wrap flex-col md:flex-row justify-around w-full">
+      <div class="p-2 w-full">
+        <div class="p-4 bg-gray-100 rounded-full">
+          <h1 class="ml-2 font-bold uppercase">Customer information</h1>
         </div>
-
-        <div>
-            <label>Traditional
-                <input type="radio" name="method" value="traditional">
-            </label>
+      </div>
+      <div class="lg:px-2 lg:w-1/3 flex-col">
+        <div class="mt-2">
+          <label class="block text-sm text-gray-00" for="firstname">Firstname</label>
+          <input class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" name="firstname" type="text" required placeholder="Your Firstname" aria-label="Firstname">
         </div>
-        <button type="submit">Continue</button>
+        <div class="mt-2">
+          <label class="block text-sm text-gray-00" for="lastname">Lastname</label>
+          <input class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" name="lastname" type="text" required placeholder="Your lastname" aria-label="Lastname">
+        </div>
+        <div class="mt-2">
+          <label class="block text-sm text-gray-600" for="email">Email</label>
+          <input class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"  name="email" type="email" required placeholder="Your Email" aria-label="Email">
+        </div>
+      </div>
+      <div class="lg:px-2 lg:w-1/3 flex-col">
+        <div class="mt-2">
+          <label class="block text-sm text-gray-600" for="address">Address</label>
+          <input class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" name="address" type="text" required placeholder="Address" aria-label="Address">
+        </div>
+        <div class="mt-2">
+          <label class="block text-sm block text-gray-600" for="postal">Postal code</label>
+          <input class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" name="postal" type="text" required placeholder="Postal code" aria-label="Postal code">
+        </div>
+        <div class="mt-2">
+          <label class="block block text-sm text-gray-600" for="phone">Phone</label>
+          <input class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded" name="phone" type="tel" required placeholder="Phone" aria-label="Phone">
+        </div>  
+      </div>
+      <div class="w-full md:px-24 flex-col mt-6">
+          <p class="text-gray-800 font-medium">Payment</p>
+          <div class="relative inline-flex">
+            <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/></svg>
+            <select name="method" class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+              <option>online</option>
+              <option>traditional</option>
+            </select>
+          </div>
+        </div>
+      <div class="mt-4 px-4 w-full text-right flex justify-end">
+          <button type="submit" class="flex justify-center px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none">
+              <svg aria-hidden="true" data-prefix="far" data-icon="credit-card" class="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"/></svg>
+              <span class="ml-2 mt-5px">Order!</span>
+          </button>
+      </div>
     </form>
+  </div>
 
 {% endblock content %}

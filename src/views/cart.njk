@@ -1,26 +1,146 @@
 {% extends "_base.njk" %}
 
+{%  set totalPrice = cart.totalPrice or 0 %}
+{%  set totalQuantity = cart.totalQuantity or 0 %}
+
+
+{% block header %}
+    Cart | Total: <span data-id="totalPrice">{{ totalPrice }}</span> PLN
+{% endblock header %}
+
 {% block content %}
-    <h1>Cart</h1>
+    {% if totalQuantity > 0 %}
+        <form method="post" action="/cart" class="flex w-full justify-between p-8 text-gray-800 bg-white shadow-lg pin-r pin-y">
+            <table class="lg:px-2 lg:w-1/2 text-sm lg:text-base" cellspacing="0">
+                <thead>
+                <tr class="h-12 uppercase">
+                    <th class="hidden md:table-cell"></th>
+                    <th class="text-center">Product</th>
+                    <th class="text-center">
+                        <span class="lg:hidden" title="Quantity">Qtd</span>
+                        <span class="hidden lg:inline">Quantity</span>
+                    </th>
+                    <th class="hidden text-center md:table-cell">Unit price</th>
+                    <th class="text-center">Total price</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for id, product in cart.items %}
+                        <tr data-id="product" data-product="{{ product._id["$oid"] }}">
+                            <td class="hidden pb-4 md:table-cell">
+                                <a href="/product/{{ product._id["$oid"] }}">
+                                    <img src="{{ product.image }}" class="w-20 rounded" alt="Thumbnail">
+                                </a>
+                            </td>
+                            <td>
+                                <p class="text-center">{{ product.name }}</p>
+                            </td>
+                            <td class="">
+                                <div class="w-20 mx-auto">
+                                    <div class="relative flex flex-row w-full h-8">
+                                    <input type="number" data-id="quantity" name="{{ product._id["$oid"] }}" value="{{ product.quantity }}"
+                                    class="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black focus:text-black" />
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="hidden text-center md:table-cell">
+                            <span class="text-sm lg:text-base font-medium">
+                                <span data-id="productUnitPrice">{{ product.price }}</span> PLN
+                            </span>
+                            </td>
+                            <td class="text-center">
+                            <span class="text-sm lg:text-base font-medium">
+                                <span data-id="productTotalPrice" >{{ product.price * product.quantity }}</span> PLN
+                            </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="lg:px-2 lg:w-1/3">
+                <div class="p-4 bg-gray-100 rounded-full">
+                <h1 class="ml-2 font-bold uppercase">Order Details</h1>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between pt-4">
+                        <div class="lg:px-4 lg:py-2 m-2 text-lg lg:text-xl font-bold text-center text-gray-800">
+                        Total
+                        </div>
+                        <div class="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
+                        <span data-id="totalPrice">{{ totalPrice }}</span> PLN
+                        </div>
+                    </div>
+                    <button type="submit" class="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none">
+                        <svg aria-hidden="true" data-prefix="far" data-icon="credit-card" class="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"/></svg>
+                        <span class="ml-2 mt-5px">Procceed to checkout</span>
+                    </button>
+                </div>
+            </div>
+        </form>
 
-    {%  set total = cart.total or 0 %}
-    Total: {{ total }}
+        <script>
+            function makeFetch(quantity, id){
+                const value = {
+                    type: "set",
+                    id, 
+                    quantity 
+                }
+                return new Promise((resolve, reject) => {
+                    fetch("/api/cart", {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify(value)
+                    }).then(response => {
+                        if(!response.ok){
+                            throw "Data fetch Error";
+                        }
+                        return response.json()
+                    }).then(json => {
+                        return resolve(json);
+                    })
+                });     
+            }
 
-    <section class="products">
-    {% for id, product in cart.items %}
-        <article>
-            <header>
-                <h2>{{ product.name }}</h2>
-            </header>
-            <img src="{{ product.image }}" />
-            <aside>
-                Price: {{ product.price }}
-                <a href="/product/{{ product._id["$oid"] }}" >View details</a>
-                Quantity: {{ product.quantity }}
-            </aside>
-        </article>
-    {% endfor %}
-    </section>
+            document.addEventListener("DOMContentLoaded", () => {
+                
+                const products = document.querySelectorAll(`[data-id="product"]`);
 
-    <a href="/checkout">Order!</a>
+                products.forEach(el => {
+                    const input = el.querySelector(`[data-id="quantity"]`);
+                    input.addEventListener("blur", e => {
+                        const name = e.target.name;
+                        const quantity = e.target.value;
+                        console.log({name, quantity});
+
+                        makeFetch(quantity, name).then(({ totalPrice, totalQuantity, productPrice, productQuantity}) => {
+                            const productUnitPriceEl = el.querySelector(`[data-id="productUnitPrice"]`);
+                            const productTotalPriceEl = el.querySelector(`[data-id="productTotalPrice"]`);
+                            
+                            productUnitPriceEl.textContent = productPrice;
+                            productTotalPriceEl.textContent = productPrice * productQuantity;
+                            input.value = productQuantity;
+
+
+                            const totalPriceEls = document.querySelectorAll(`[data-id="totalPrice"]`);
+                            totalPriceEls.forEach(element => {
+                                element.textContent = totalPrice;
+                            })
+
+                            const cartCountEl = document.getElementById("cartCount");
+                            cartCountEl.textContent = totalQuantity;
+                        })
+                    })
+                })
+
+            })
+        </script>
+    {% else %}
+        <div class="flex w-full justify-between p-8 text-gray-800 bg-white shadow-lg pin-r pin-y">
+            <p>Your cart is empty :)
+        </div>
+
+        {% endif %}
 {% endblock content %}

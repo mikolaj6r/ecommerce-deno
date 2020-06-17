@@ -3,7 +3,29 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const product = document.getElementById("product");
 
-    button.addEventListener("click", () => {
+    const data = {
+        type: "count",
+    }
+
+    fetch("/api/cart", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    }).then(response => {
+        if(!response.ok){
+            throw "Data fetch Error";
+        }
+        return response.json()
+    }).then(json => {
+        const cartCountEl = document.getElementById("cartCount");
+        cartCountEl.textContent = json.totalQuantity;
+    })
+
+
+    button && button.addEventListener("click", () => {
         const id = product.dataset.id;
 
         const value = {

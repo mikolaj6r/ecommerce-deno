@@ -1,3 +1,4 @@
-body {
-    background: red;
+*, :after, :before {
+    box-sizing: border-box;
+    border: 0 solid #d2d6dc;
 }

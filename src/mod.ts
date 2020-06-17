@@ -75,8 +75,7 @@ app.use(parentRouter.routes());
 app.use(notFound);
 
 app.addEventListener("listen", () => {
-  console.log("App is listening to port: 8000");
-
+  console.log(`App is listening on port: ${port}`);
 });
 
 app.addEventListener("error", (error) => {
