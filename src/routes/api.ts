@@ -23,7 +23,7 @@ router.post( "/cart", async ( ctx: any, next: any) => {
 
             
             if(product){
-                const cart = await ctx.session.get("cart") || {};
+                const cart = await ctx.state.session.get("cart") || {};
                 const newCart = {
                     ...cart,
                     items: {
@@ -47,7 +47,7 @@ router.post( "/cart", async ( ctx: any, next: any) => {
                 newCart.totalPrice = totalPrice;
 
 
-                await ctx.session.set("cart", newCart);
+                await ctx.state.session.set("cart", newCart);
                 break;
             }
         }
@@ -58,7 +58,7 @@ router.post( "/cart", async ( ctx: any, next: any) => {
 
             
             if(product){
-                const cart = await ctx.session.get("cart") || {};
+                const cart = await ctx.state.session.get("cart") || {};
                 const newCart = {
                     ...cart,
                     items: {
@@ -82,7 +82,7 @@ router.post( "/cart", async ( ctx: any, next: any) => {
                 newCart.totalPrice = totalPrice;
 
 
-                await ctx.session.set("cart", newCart);
+                await ctx.state.session.set("cart", newCart);
 
                 ctx.response.status = 200;
                 ctx.response.body = JSON.stringify({ 
@@ -96,7 +96,7 @@ router.post( "/cart", async ( ctx: any, next: any) => {
             }
         }
         case "count": {
-                const cart = await ctx.session.get("cart") || {};
+                const cart = await ctx.state.session.get("cart") || {};
 
                 const totalQuantity = cart.items && Object.values<CartItem>(cart.items).reduce<number>((acc: number, el: CartItem) => {
                     return acc + el.quantity

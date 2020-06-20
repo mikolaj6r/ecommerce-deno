@@ -3,6 +3,6 @@ export { Application , Router, send, Middleware, RouterMiddleware } from "https:
 export {   viewEngine,
     engineFactory,
     adapterFactory,
-    ViewConfig} from "https://raw.githubusercontent.com/mikolaj6r/view-engine/master/mod.ts"
+    ViewConfig} from "https://deno.land/x/view_engine/mod.ts"
 
 export { MongoClient, ObjectId } from "https://deno.land/x/mongo@v0.8.0/mod.ts"

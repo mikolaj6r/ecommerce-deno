@@ -9,15 +9,14 @@ interface CartItem {
 
 export default {
     async index(ctx: any){
+
         const products = await productService.find();
-
-        const cart = await ctx.session.get("cart");
-
+        const cart = await ctx.state.session.get("cart");
         ctx.render("index", { products, cart });
     },
 
     async getCart(ctx: any){
-        const cart = await ctx.session.get("cart");
+        const cart = await ctx.state.session.get("cart");
 
         const products = await productService.find();
 
@@ -34,7 +33,7 @@ export default {
             totalPrice?: number
         }
 
-        const cart: Cart = await ctx.session.get("cart");
+        const cart: Cart = await ctx.state.session.get("cart");
 
 
         const { value: data } = await ctx.request.body();
@@ -71,14 +70,14 @@ export default {
         newCart.totalQuantity = totalQuantity;
         newCart.totalPrice = totalPrice;
 
-        await ctx.session.set("cart", newCart);
+        await ctx.state.session.set("cart", newCart);
 
         ctx.response.redirect('/checkout');
 
     },
 
     async getCheckout(ctx: any){
-        const cart = await ctx.session.get("cart");
+        const cart = await ctx.state.session.get("cart");
 
         const products = await productService.find();
 
@@ -87,7 +86,7 @@ export default {
     },
 
     async postCheckout(ctx: any){
-        const cart = await ctx.session.get("cart");
+        const cart = await ctx.state.session.get("cart");
 
         const { value: data } = await ctx.request.body();
 
@@ -139,7 +138,7 @@ export default {
         }
         if(id && checkout.type == "online"){
             // reset cart
-            ctx.session.set("cart", {});
+            ctx.state.session.set("cart", {});
             // payu
             const products = Object.values<CartItem>(cart.items).map(product => ({
                 name: product.name,
@@ -206,7 +205,7 @@ export default {
         }
         else if(id){
             // reset cart
-            ctx.session.set("cart", {});
+            ctx.state.session.set("cart", {});
 
             ctx.response.redirect(`/checkout/${id}`);
             return;
@@ -229,7 +228,7 @@ export default {
             return;
         }    
 
-        const cart = await ctx.session.get("cart");
+        const cart = await ctx.state.session.get("cart");
 
         const checkout = await checkoutService.findOne(id);
 

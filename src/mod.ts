@@ -4,12 +4,14 @@ import * as flags from "https://deno.land/std/flags/mod.ts";
 import "https://deno.land/x/dotenv/load.ts";
 
 import { Application , Router, send, Middleware, RouterMiddleware } from "./deps.ts";
+
 import {
   viewEngine,
   engineFactory,
   adapterFactory,
   ViewConfig
 } from "./deps.ts";
+
 import { Session } from "https://deno.land/x/session/mod.ts";
 
 
@@ -47,7 +49,6 @@ const viewConfig: ViewConfig = {
   viewRoot: "./views",
   viewExt: ".njk"
 }
-
 
 // session middleware
 app.use(session.use()(session));

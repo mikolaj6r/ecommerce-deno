@@ -1,13 +1,12 @@
-FROM hayd/alpine-deno:1.0.0
+FROM mikolaj6r/deno
 
 WORKDIR /app
 
 EXPOSE 8080
 
-# Prefer not to run as root.
-
-# These steps will be re-run upon each file change in your working directory:
 COPY ./src .
 
-# Added to ENTRYPOINT of base image.
+RUN deno cache https://deno.land/x/denjucks/src/deps/path/std/path/mod.ts
+RUN deno cache --unstable mod.ts
+
 CMD ["run", "--allow-net", "--allow-read", "--allow-write", "--allow-plugin", "--allow-env", "--unstable", "mod.ts", "--port=8080"]

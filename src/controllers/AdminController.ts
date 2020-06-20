@@ -4,13 +4,13 @@ export default {
     async index(ctx: any){
         const products = await productService.find();
 
-        const user = await ctx.session.get("user");
+        const user = await ctx.state.session.get("user");
 
         ctx.render("accounts/admin", { user, products });
 
     },
     async getLogin(ctx: any){
-        const user = await ctx.session.get("user");
+        const user = await ctx.state.session.get("user");
         
         if (user) return ctx.response.redirect('/admin');
         ctx.render('accounts/login', { messages: ["Login first, please"]});
@@ -44,7 +44,7 @@ export default {
 
             const email = data.value.get('email');
 
-            await ctx.session.set("user", email );
+            await ctx.state.session.set("user", email );
 
             ctx.response.redirect('/admin');
 
@@ -61,14 +61,14 @@ export default {
     },
 
     async getNewProduct(ctx: any){
-        const user = await ctx.session.get("user");
+        const user = await ctx.state.session.get("user");
 
         ctx.render("accounts/new-product", { user });
 
     },
 
     async postNewProduct(ctx: any){
-        const user = await ctx.session.get("user");
+        const user = await ctx.state.session.get("user");
         const { value: data } = await ctx.request.body();
 
 
@@ -93,7 +93,7 @@ export default {
     },
 
     async getEditProduct(ctx: any){
-        const user = await ctx.session.get("user");
+        const user = await ctx.state.session.get("user");
 
         const id = ctx.params && ctx.params.id;
 
@@ -110,7 +110,7 @@ export default {
     },
 
     async postEditProduct(ctx: any){
-        const user = await ctx.session.get("user");
+        const user = await ctx.state.session.get("user");
 
         const id = ctx.params && ctx.params.id;
 
